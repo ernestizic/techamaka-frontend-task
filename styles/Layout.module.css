@@ -1,0 +1,44 @@
+.container {
+  margin: 50px auto;
+  max-width: 90%;
+}
+
+.colgrid {
+  color: #000;
+  border: 1px solid #0070f3;
+  padding: 10px
+}
+.colgrid:hover {
+  color: #fff;
+  border: 1px solid #0070f3;
+  background: #0070f3;
+  padding: 10px
+}
+
+.eventTitle {
+  font-size: 17px;
+}
+.eventName {
+  font-size: 14px;
+}
+.eventName span {
+  font-weight: bold;
+}
+
+.goback{
+  background-color: #0070f3;
+  color: #fff;
+  padding: 10px;
+}
+
+.detailContainer{
+  margin: 50px auto;
+  max-width: 90%;
+}
+
+.details{
+  margin-top: 30px;
+}
+.details span{
+  font-size: 18px;
+}

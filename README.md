@@ -1,34 +1,93 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Techamaka - Frontend Web Task Solution
 
-## Getting Started
+## The Challenge
+Frontend Web: Technical Task: You are to create a landing page using Nextjs and Tailwindcss and GraphQL. It is an events listing page, with a detail page. Enter below the link to your public github repo for the task. Note: when the localhost url as shown in the image above is changed the theme colour of the page should also change. Enter the link to the public github repo below... Endpoints are listed here: [API link](https://dev.peddlesoft.com/graphql)
 
-First, run the development server:
+___
 
-```bash
-npm run dev
-# or
-yarn dev
+## Screenshot
+
+`Landing page`
+
+![Landing page](./public/techamaka-Events.png)
+
+`Detail page`
+
+![Details page](./public/techamaka-detail-page.png)
+
+### Notable codeblocks
+
+`Get events from api`
+
+```javascript
+const eventQuery = `
+{
+  events{
+    id
+    name
+    venue
+  }
+}
+`
+
+export const getStaticProps = async ()=> {
+  const res = await fetch('https://dev.peddlesoft.com/graphql', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({query: eventQuery})
+  })
+  const data = await res.json();
+  
+  return {
+    props: {
+      data: data.data.events
+    }
+  }
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`Get event detail`
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+```javascript
+export const getServerSideProps = async (context) => {
+  const eventid = context.params.id
+  const eventDetailQuery = `
+{
+    eventById(id: ${eventid}){
+      id
+      name
+      theme
+      description
+      venue
+      attendance
+      flyer
+    }
+  }
+`
+  const res = await fetch('https://dev.peddlesoft.com/graphql',
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ query: eventDetailQuery }),
+    }
+  );
+  const data = await res.json();
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+  return {
+    props: {
+      data: data.data.eventById,
+    },
+  };
+};
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```
 
-## Learn More
+### Built with
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- [Next.js](https://nextjs.org/) - React framework
+- [Tailwind css](https://tailwindcss.com/) - css framework
